@@ -2,7 +2,7 @@
 <widget xmlns = "http://www.w3.org/ns/widgets"
     xmlns:gap = "http://phonegap.com/ns/1.0"
     id        = "com.phonegap.optimistic"
-    version   = "2.0.0">
+    version   = "3.0.0">
 	<icon src="icon.png" />
 	<gap:splash src="splash.png" />
 
@@ -11,7 +11,7 @@
 <description>
 This app was designed to help encourage everyone raising or caring for a special needs child. </description>
 
-<author href="https://example.com" email="leahreynolds.lr@gmail.com">
+<author href="http://www.optimisticautistic.com" email="leahreynolds.lr@gmail.com">
 Leah Reynolds
 </author>
 
