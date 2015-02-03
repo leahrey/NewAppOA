@@ -1,93 +1,848 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>The Optimistic Autistic</title>
-<link href="http://code.jquery.com/mobile/1.0/jquery.mobile-1.0.min.css" rel="stylesheet" type="text/css" />
+<!doctype html>
+<html>
+<head><meta name="viewport" content="width=deviceWidth; initial-scale=1.0; maximum-scale=1.0; minimum-scale=1.0; user-scalable=0;"/>
+<title>Meridien 24/7</title>
+<link href="css/styles.css" rel="stylesheet" type="text/css">
+<link href="http://code.jquery.com/mobile/1.0/jquery.mobile-1.0.min.css" rel="stylesheet" type="text/css">
 <script src="http://code.jquery.com/jquery-1.6.4.min.js" type="text/javascript"></script>
 <script src="http://code.jquery.com/mobile/1.0/jquery.mobile-1.0.min.js" type="text/javascript"></script>
+<script src="js/phonegap.js"></script>
+<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+<script>
+$(function () { 
+var map = null;
+var destMarker = null;
+var lat = 37.771829;
+var lng = -122.401681;
+var latlng;
+var cPosition = navigator.geolocation.getCurrentPosition(geoSuccess, geoFail, {timeout:3000, enableHighAccuracy:true});
+
+function geoSuccess (pos) {
+lat = pos.coords.latitude;
+lng = pos.coords.longitude;
+latlng = new google.maps.LatLng(lat,lng);
+}
+
+function geoFail () { 
+latlng = new google.maps.LatLng(lat,lng); // Default location is San Francisco
+$('.errorMsg').css('display', 'block');
+$('#gMap').css('background-image', 'url(img/fakeMap.jpg)');
+}
+
+function makeMap () {
+if (map == null) {
+latlng = new google.maps.LatLng(lat,lng);
+var options = { zoom: 16, center: latlng, disableDefaultUI: true, mapTypeId: google.maps.MapTypeId.ROADMAP };
+map = new google.maps.Map(document.getElementById('gMap'), options); 
+uRHere = new google.maps.Marker({ position: latlng, map: map, title: 'You are here' });
+}
+}
+
+$('.mapIt').click(function () { 
+makeMap();
+var dest = null;
+var category = $(this).closest('div[data-role="page"][id]').attr('id');
+var restName = $(this).parent('div').siblings('h2').text();
+switch (category) {
+case 'asian':
+dest = new google.maps.LatLng(lat + 0.002, lng + 0.002);
+break;
+case 'bbq':
+dest = new google.maps.LatLng(lat + 0.001, lng - 0.002);
+break;
+case 'italian':
+dest = new google.maps.LatLng(lat + 0.003, lng + 0.0015);
+break;
+case 'mexican':
+dest = new google.maps.LatLng(lat - 0.002, lng - 0.002);
+break;
+case 'veggie':
+dest = new google.maps.LatLng(lat - 0.001, lng - 0.003);
+break;
+}
+if (destMarker == null) {
+destMarker = new google.maps.Marker({ position: dest, map: map, icon: 'img/fork.png', title: restName }); 
+} else {
+destMarker.setPosition(dest);
+destMarker.setTitle(restName);
+}
+$('#map h1').text(restName);
+});
+
+$('body > *').css({minHeight: window.innerHeight + 'px !important'});
+
+document.addEventListener('deviceready', doDeviceReady, false);
+
+function doDeviceReady () {
+// The following tells the app to fade #page1 in after the splash screen
+$('#page1').fadeIn(5000);
+}
+});
+</script>
 </head>
 
 <body>
-<div data-role="page" id="page1">
+<div id="page" data-role="page" data-theme="c">
   <div data-role="header">
-    <h1>The Optimistic Autistic</h1>
+    <h1>MHUMC Mobile Ministry App</h1>
   </div>
   <div data-role="content" data-theme="a">
-    <div align="center"><img src="images/OptimisticAutistic.png" width="200" height="200" longdesc="http://www.blackbirddetectiveseries.com" />
-    </div>
+    <p><img src="mhumc320x180.png" width="320" height="180" alt="MHUMC"></p>
+    <p>Welcome to the MHUMC Mobile Ministry.    </p>
+    <p>The Mobile Ministry has but one purpose, to share the Gospel of Jesus Christ with as many people possible.  Using the combination of information and visual technologies, our business is centered primarily upon this principle. </p>
+  </div>
+  <ul data-role="listview">
+    <li><a href="#sermon">Sermon Notes</a></li>
+    <li><a href="#bible">Bible Study Notes</a></li>
+    <li><a href="#social">MHUMC Social Media</a></li>
+    <li>
+      <div data-role="controlgroup" data-type="horizontal" ><a href="#map" data-role="button" data-inline="false" class="mapIt">Map It</a></div>
+    </li>
+  </ul>
+</div>
+<div data-role="page" id="sermon" data-add-back-btn="true">
+  <div data-role="header">
+    <h1>Sermon Notes</h1>
+  </div>
+  <div data-role="content">
     <ul data-role="listview">
-      <li><a href="#about">About Us</a></li>
-      <li><a href="#InspirationalQuotes">Inspirational Quotes</a></li>
-      <li><a href="http://www.optimisticautistic.com">The Optimistic Autistic Blog</a></li>
-      <li><a href="#tips">Tips for Stressed Parents</a></li>
-      <li><a href="http://www.amazon.com/Optimistic-Autistic-Autism-Our-Story-ebook/dp/B00DRQTNQ6/ref=sr_1_1?ie=UTF8&qid=1419036649&sr=8-1&keywords=the+optimistic+autistic">Buy Our Book</a></li>
-      <li><a href="#cope">Coping Mechanisms</a></li>
+      <li><a href="#impos"> 12/21 - Impossibility is God's Speciality</a></li>
+      <li><a href="#sermon2">12/7 - Are You Bound or Are You Free?</a></li>
+      <li><a href="#sermon3">11/28 - Starting Over</a></li>
+      <li><a href="#sermon4">11/16 - We must desire the sincere milk of the word </a></li>
     </ul>
   </div>
-</div>
-<div data-role="page" id="about" data-add-back-btn="true">
-  <div data-role="header">
-    <h1>About Us</h1>
-  </div>
-  <div data-role="content">
-    <p>The Optimistic Autistic is more than just an app. It is a blog, book and inspirational app to help inspire and inform parents and caregivers of special needs children. Our aim is to encourage others to not only keep their heads up but to share their stories, as we share ours.</p>
-    <p>There is much to gain from sharing your story. Not only do you gain courage, but you also strengthen others with your story. </p>
-    <p>As a parent of an Autistic child, I know that it can be a lonely and trying time for not only the parents, but the entire family. I also know that I wouldn't trade the experience of raising our Jordan for nothing in the world.</p>
-    <p>Check out our app. We encourage you to check out our blog at: <a href="http://www.optimisticautistic.com">http://www.optimisticautistic.com</a> and to read our testimony: <a href="http://www.blackbirddetectiveseries.com/optimisticautistic.html">The Optimistic Autistic: Our Testimony</a></p>
-    <p>&nbsp; </p>
+  <div data-role="footer">
+    <h4>&nbsp;</h4>
   </div>
 </div>
-<div data-role="page" id="InspirationalQuotes" data-add-back-btn="true">
+<div data-role="page" id="impos" data-add-back-btn="true">
   <div data-role="header">
-    <h1>Inspirational Quotes</h1>
+    <h1>Impossibility is God's Speciality</h1>
   </div>
-  <div data-role="content">
-    <div id="pic"><p><img src="images/peace.png" alt="Peace....." width="255" height="191" class="ui-btn-corner-right" /></p></div>
-    <p>Here you will find inspirational quotes to help you get through your day. </p>
-    <p>Enjoy!</p>
-    <p>Words are the creative force which brings into existence something that wasn't before. Be mindful of what you speak.</p>
-    <p>Speak only words that uplift.</p>
-    <p>Positivity is internal...visualize it....verbalize it....internalize it</p>
+  <div data-role="content"><strong>Sermon Topic:</strong> Impossibility is God's Speciality<br>
+    <br>
+    <strong>Scriptures:</strong>  Ephesians 2:8, John 3:16, Luke 2:9, Philippians 2:6 - 7, Romans 5:18 - 19, Philippians 10:9-2, John 1:12<br>
+    <br>
+    <strong>Sermon Notes:</strong><br>
+    <br>
+    Christmas is a time of giving. This pattern of giving began in Ephesians 2:8 - For by grace ye are saved through faith; and that not of yourselves; it is the gift of God.<br>
+    <br>
+    <strong>John 3:16 - For God so loved the world, that he gave his only begotten Son, that whosoever believeth in him should not perish, but have everlasting life.</strong><br>
+    <br>
+    When we consider the gift of God we must reflect on Luke 2:9 - And, lo, the angel of the Lord came upon them, and the glory of the Lord shone round about them; and they were sore afraid.<br>
+    <br>
+    The child that was born was humanity; the son that was given is divinity. The word became flesh and dwelt among us.<br>
+    <br>
+    While the world goes about it's business of sales and markdowns; God sends his son wrapped in swaddling clothes and born in a manger. He was given a common name, Jesus. But there was something special about this birth.<br>
+    <br>
+    God had already pre-ordained the inn being full and the child being born in the manger. Do you have room for Jesus? Or is your life so full of clutter that you are focusing on other people and things.<br>
+    <br>
+    How well do you treat others?<br>
+    <br>
+    Be careful how we entertain strangers, we could be entertaining an angel.<br>
+    <br>
+    The angel announced his birth, his resurrection, and will announce his return.<br>
+    <br>
+    God has plans that we can't change.<br>
+    <br>
+    The Relevance of Christmas - <strong>Philippians 2:6 - 7 - Who, being in the form of God, thought it not robbery to be equal with God: But made himself of no reputation, and took upon him the form of a servant, and was made in the likeness of men. </strong><br>
+    <br>
+    He became like us so we may be like him.<br>
+    <br>
+    Christ came to the lowly, to shepherds in the fields watching their flock. He didn't come to the affluent and the high.<br>
+    <br>
+    When you are wrapped up in your affairs you can't see the gift. We have lists, goals and plans but don't focus on Jesus.<br>
+    <br>
+    God became a man that's the meaning of Christmas!<br>
+    <br>
+    Jesus was born like us, he grew like us and was tempted like us; so he can understand us and our struggles.<br>
+    <br>
+    Jesus came to die for us all.<br>
+    <br>
+    He came as a sacrifice - the ultimate sacrifice.<br>
+    <br>
+    <strong>Romans 5:18 - 19 - Therefore as by the offense of one's judgement came upon all men to condemnation; even so by the righteousness of one the free gift came upon all men unto justification of life. For as by one man's disobedience many were made sinners, so by the obedience of one shall many be made righteous. Christ's obedience to God's plan to make us righteous after Adam's sin made us all sinners. </strong><br>
+    <br>
+    The issue is not whether you will admit that Jesus was born because according to <strong>Philippians 10:9-2</strong> - <strong>Every knee shall bow and every tongue will confess that he is Lord. </strong><br>
+    <br>
+    Christ loved us, when we didn't know how to love.<br>
+    <br>
+    On December 25th there will be a multitude opening gifts and the greatest gift will be standing at the door knocking.<br>
+    <br>
+    If you open the door, he will come in.<br>
+    <br>
+    <strong>John 1:12 - But as many as received him, to them gave he power to become the sons of God, even to them that believe on his name. </strong>We must receive him.<br>
+    <br>
+  Jesus is the reason for the season.</div>
+  <div data-role="footer">
+    <h4>Footer</h4>
   </div>
 </div>
-<div data-role="page" id="tips"data-add-back-btn="true">
+<div data-role="page" id="sermon2" data-add-back-btn="true">
   <div data-role="header">
-    <h1>Tips for Stressed Parents</h1>
+    <h1>Are You Bound or Are You Free?</h1>
   </div>
-  <div data-role="content">
-    <p>Here you will find tips to make your day easier. <br />
-      <br />
-      <strong>Doctor Appointments</strong><br />
-      <br />
-    When scheduling doctor appointments make sure to inform the receptionist of any foreseeable issues (e.g. need to be in a quiet area, morning or afternoon preferences, anything that will make it easier on your child during their visit).</p>
-    <p><strong>Be your own advocate</strong><br />
-      <br />
-      Advocates are useful to those who do not understand Special Education law and procedures. While some parents are well versed in Special Education law and can move through the process with ease, many are not so lucky. Special Education is quite complicated. Many times an advocate will save you heartache and headache.<br />
-      <br />
-    There are many people out there willing to help parents and special needs students, however locating these people may be a trying task. As a parent who struggled with locating support from outside of our home, I would suggest that you start at home.  </p>
+  <div data-role="content"><strong>Date:</strong> December 7, 2014<br>
+    <strong></strong><br>
+    <strong>Scriptures:</strong> Jeremiah 8:18, Titus 2:13, Titus 1:16, 2 Timothy 2:5<br>
+    <strong></strong><br>
+    <strong>Sermon Topic:</strong> Are You Bound or Are You Free?<br>
+    <br>
+    Jeremiah 8:18 – When I would comfort myself against sorrow, my heart is faint in me. Titus 2:13 – "while we wait for the blessed hope—the appearing of the glory of our great God and Savior, Jesus Christ"<br>
+    <br>
+    Christ will come at the least expected time. <br>
+    <br>
+    As it was in the day of Noah, so is it now. The Lord himself shall descend from heaven and the dead in Christ shall rise first. <br>
+    <br>
+    When the trumpet sounds, everything will stop!<br>
+    <br>
+    When Christ returns the first time, he will return for his church. The dead in Christ shall rise, first. When Christ returns the second time, he will return for judgment. Those who did not rise the first time, will rise to be judged by Christ. <br>
+    <br>
+    <strong>Matthew 25</strong> – He shall separate them one from another to judge.<br>
+    <br>
+    Are you bound or are you free? There can be no "maybe" or "I think so". You must be sure.<br>
+    <br>
+    Some profess that they believe in God. Demons also believe that God exists. <br>
+    <br>
+    Some claim to know God – but deny him by the way they live. They praise God on Sunday and cut up when they leave the church.<br>
+    <br>
+    God calls on us to be holy.<br>
+    <br>
+    <strong>2 Timothy 2:5 </strong><strong>– </strong>Preach the word – for the time will come when you will not endure sound doctrine. <br>
+    <br>
+    <br>
+    We are in the last days. The last days began at the time of Christ&rsquo;s ascension. We have always been in the last days.<br>
+    <br>
+    <strong>Psalm 9:17</strong> – "The wicked go down to the realm of the dead, all the nations that forget God" – We must pray for those who don&rsquo;t know Christ. <br>
+    <br>
+    <br>
+    We must let go of un-thankfulness, un-forgiveness and being un-loving. If you let go of those things, your health will improve.<br>
+    <br>
+    Don&rsquo;t let craziness put you in the ground.<br>
+    <br>
+    The word of God explains our position, right now.<br>
+    <br>
+    Don&rsquo;t judge unless the real judge will judge you. <br>
+    <strong><br>
+    </strong> <strong>Proverbs</strong> <strong>6 </strong>– These things the lord hates<br>
+    <br>
+    Some of us are quick to destroy someone&rsquo;s reputation. Regularly attend church service- on every committee, but won&rsquo;t submit to the authority of Christ. <br>
+    <br>
+    Obedience and love are the traits of a Christian.<br>
+    <br>
+    <strong>Hebrews 13:17</strong> – You must obey your leader. He must give an account for everyone in the congregation.<br>
+    <br>
+    <strong>1 Peter 4:17</strong> – For the time has come for judgment to being in the house of the Lord. God will judge the church first. <br>
+    <br>
+    <br>
+    <strong>Matthew 22</strong> - Love your neighbors as you love yourself. Let&rsquo;s not be selfish or self-centered. <br>
+    We can&rsquo;t be prideful in positions. <br>
+    <strong><br>
+    </strong> <strong>1 Corinthians 13:14</strong> – Don&rsquo;t be puffed up. Love never gives up – Love cares more for others than self.<br>
+    <br>
+    If you yield yourself to things that aren&rsquo;t of God you are under the control of whatever you yield to.<br>
+  We are blessed and saved – all of our needs are met and we represent Christ. </div>
+  <div data-role="footer">
+    <h4>Footer</h4>
   </div>
 </div>
-<div data-role="page" id="cope" data-add-back-btn="true">
+<div data-role="page" id="sermon3" data-add-back-btn="true">
   <div data-role="header">
-    <h1>Coping Mechanisms</h1>
+    <h1>Starting Over</h1>
   </div>
   <div data-role="content">
-    <p>Here you will find information to help you cope and rejuvenate yourself and your family. Each day we will post a new mechanism to help you cope with caring for a special needs child. </p>
-    <p><strong>Get a Life, Literally</strong><br />
-      <br />
-Think about it. When it was just you, what made you happy? What hobbies did you have before having children? Once you find that out, you must act. </p>
-    <p>Believe me, you will find a way to do what you love. If you are honest with yourself about your dreams and your passions, you can enrich your life. Try it.</p>
-    <p>Once you start doing what you love, you will be immensely rewarded. I adopted a large repertoire of hobbies after Jacob’s diagnosis. I found that my hobbies helped keep me grounded. I make it a goal to add a new hobby each year. </p>
-    <p>Since writing is my passion, I wrote four books. I also learned to sketch, no matter how elementary it looks, it was fun. I have taken swimming lessons, design websites and crochet in my free time.<br />
-      <br />
-      I am constantly questioned on how I find time to do these things. These things are essential to keeping me grounded. I need to write. Writing is my escape from my often chaotic life.<br />
-  <br />
-      This is a part of loving oneself. To love yourself you must find out what works for you. <br />
-  <br />
-      Then you must pursue it with a passion. </p>
-    <p>After all, you are not on the earth to solely parent. </p>
+    <div><strong>Sermon Topic:</strong> Starting Over</div>
+    <div><strong>Date:</strong> November 23, 2014</div>
+    <div><strong><br>
+      Scripture: </strong>Philippians 3:7-14, Philippians 4:8, John 5:7</div>
+    <div><strong><br>
+      Notes</strong>:<br>
+      <br>
+      How do you begin again? When your life has been interrupted by failed relationships, trials and tragedy it is difficult to let go and start over. Starting over is a process. Some steps are crucial to starting over successfully.<br>
+      <br>
+    </div>
+    <div>Letting go – there are probably things that you hold onto that you&rsquo;ve held on to for years.</div>
+    <div>There are times in life when you have to let go of people – places and things. The one thing that keeps you from your destiny is your past.<br>
+      <br>
+    </div>
+    <div>Philippians 3:7-14 – Sometimes we don&rsquo;t understand life. That&rsquo;s why we must wait on the Lord.</div>
+    <div>It&rsquo;s easy to form an attachment to people or things and it&rsquo;s hard to let go. Every person that comes into your life has a purpose or aren&rsquo;t in your life to stay. Some folks don&rsquo;t mean you well. Have no fellowship with them.<br>
+      <br>
+    </div>
+    <div>Letting go can be painful. The intolerance of your present will create your future. Every relationship is a current – it moves you towards your dream or away from your dreams.<br>
+      <br>
+    </div>
+    <div>Hanging on to resentment allows someone to live rent free in your head. Never let someone build your world for you. They will build it too small.<br>
+      <br>
+    </div>
+    <div>Forget about the past – don&rsquo;t let others remind you of the past. When you don&rsquo;t forgive you put yourself in a box.<br>
+      <br>
+    </div>
+    <div>If you want to start over you must first deal with the damage. Ask the right questions. Starting over will be rough, but we will make it. I&rsquo;m not going to allow anything to stop me.<br>
+      <br>
+    </div>
+    <div>Many are the afflictions of the righteous. The difference between success and failure is how you handle pressure.<br>
+      <br>
+    </div>
+    <div>There are times when the enemy will put you in the pressure cooker. But God has the power. Just like the palm tree – we can bend, but we won&rsquo;t break.<br>
+      <br>
+    </div>
+    <div><strong>Three ways to help you let go</strong></div>
+    <br>
+    <ol>
+      <li> Enjoy yourself - don&rsquo;t let anything get you down.  Those who control the pain of today can&rsquo;t control the pleasure of tomorrow.</li>
+      <li>Release the grief – emotions of anger, fear and labels – there is something more precious in you than what people say.</li>
+      <li>Don&rsquo;t rehearse your failures tomorrow is another day. Get over it – if you keep talking about it, you will be right back where you were. Don&rsquo;t allow others to remind you. If you worry and pity yourself, you will become a pitiful person that no one wants to be around.</li>
+    </ol>
+    <p>Life won&rsquo;t always be happy. You&rsquo;re not always going to wake up on the sunny side of the street – deal with it.<br>
+      <br>
+      Happiness doesn&rsquo;t depend on who you are – it depends on how you think.<br>
+      <br>
+      Philippians 4:8 – Think on these things, think on the positive and not the negative. If you allow yourself to think about the negative you will find plenty of negative things to think about.<br>
+      <br>
+      Wake up in the morning with a positive attitude. Wake up and be thankful for another day.<br>
+      <br>
+      Don&rsquo;t repress it – Don&rsquo;t hold it in – Some people hold stuff in and then one day, they explode. Let it out – don&rsquo;t hold it in. Don&rsquo;t hold on to the pain, disappointment and old negative memories.<br>
+      <br>
+      Release it! Life isn&rsquo;t a dress rehearsal, stop practicing and just do it!<br>
+      <br>
+      Stop making excuses – <strong>John 5:7</strong> – Jesus was asking the man at the pool if he wanted to be healed. The man had wasted over 30 years sitting near the pool. When Jesus came to him, the man gave Jesus nothing but excuses for his condition.<br>
+      <br>
+      Some of the people that you wait to help you won&rsquo;t. They either can&rsquo;t help you, don&rsquo;t have time or don&rsquo;t really want you to succeed.<br>
+      <br>
+      What you say sets the stage for your life. Stop talking crazy stuff, it impacts your life.<br>
+      <br>
+      By your words you are justified, by your words, you will be condemned. Your victory is as close as the roof of your mouth.<br>
+      <br>
+      You must only speak positive things. Things turn out for the best – for those who make the best of things.<br>
+      <br>
+      You are not a loser, you&rsquo;re a winner. Dr. King once said, take the first step in faith. You don&rsquo;t have to see the whole staircase to take the first step.<br>
+      <br>
+      Accept what you can&rsquo;t change – focus on what you can. Tell God exactly how you feel – Don&rsquo;t tell other people. Others can&rsquo;t help you. Resist bitterness and ask yourself, do I want to be bitter or happy.<br>
+      <br>
+      When you harbor bitterness – you end up with sickness and illnesses. Cast your cares on him – for he cares. When you awake – spend time worshiping God – Don&rsquo;t make requests.<br>
+      <br>
+      Thank him – In all things, I give you praise.<br>
+      <br>
+      When you thank God for a little, you end up with a lot.Gratitude destroys depression. No born again person should be depressed or stressed. The church is more than a building. It&rsquo;s all about people helping people. Live life with eternity in view. Don&rsquo;t wait until the conditions are perfect.<br>
+      <br>
+      They&rsquo;ll never be perfect. Let go and remind yourself that this moment is the only one that we can be sure of – in this next breath we could be gone.<br>
+      <br>
+    Start over, Let it Go!</p>
   </div>
+  <div data-role="footer">
+    <h4>Footer</h4>
+  </div>
+</div>
+<div data-role="page" id="sermon4" data-add-back-btn="true">
+  <div data-role="header">
+    <h1>We must desire the sincere milk of the word</h1>
+  </div>
+  <div data-role="content">
+    <p><strong>Date:</strong> November 16, 2014<br>
+      <br>
+      <strong>Scripture:</strong> Hosea 4:6, Galatians 3:3, 2 Timothy 3, 1 John 25, Psalms 119:113, Job 23:12<br>
+      <br>
+      <strong>Sermon Topic:</strong> We must desire the sincere milk of the word<br>
+      Spiritual growth is the development of a Christ like character and faith that has to test our faith. Our faith will be tested. <br>
+      <br>
+      Being like Christ should be our goal. We must desire the sincere milk of the word in order to grow. <br>
+      Early will I seek thee. We need the word in our spirit and mind. We need to meditate, read and hear the word of God.<br>
+      <br>
+      Forsake not the assembly of saints – God speaks to the under-shepherd and the under-shepherd speaks to the sheep. <br>
+      <br>
+  <strong>Hosea 4:6</strong> – my people are destroyed for a lack of knowledge. We as the saints of God are priesthood for non-believers. <br>
+  <br>
+      The mark of maturity is not to be tossed to and fro and not to listen to other doctrines or teachings. You must know truth. <br>
+      <br>
+      Present your body as a living sacrifice. Be not conformed to the world but transformed by the renewing of your mind. Put off the former conversations. Don&rsquo;t be judgmental or gossiper. Put off the former man. <br>
+      Some people prey on you while they say they&rsquo;re praying for you. Grow in grace and the knowledge of the Lord. <br>
+      <br>
+      We should all strive to mature. Philippians 3:13 – Yesterday is gone – we must leave it behind – stop resurrecting dead things. Stop losing sleep over it, tomorrow is a new day.<br>
+      It is he who causes spiritual growth.<br>
+      <br>
+      <strong>Galatians 3:3</strong> – Why are you trying to become perfect with your own effort?<br>
+      <strong>2 Timothy 3</strong> – Scripture reveals to us what is wrong with our lives. <br>
+      <strong>1 John 25</strong> – We know that he dwells in us and we keep his word. <br>
+      <strong>Psalms 119:113</strong> – I hate lies but I love the word of the Lord. <br>
+      <strong>Job 23:12</strong> – God&rsquo;s word is needed more than my necessary food. Growth takes effort. It takes commitment and dedication. Seek those things that are above where Christ sits. Set your sights on things above and not on the earth. <br>
+      <br>
+      Walk upright before him. Change is inevitable. Growth is optional. <br>
+      <br>
+      You must change – you don&rsquo;t have to grow.<br>
+      <br>
+      God will take you anywhere you want to go, but he can&rsquo;t take you if you don&rsquo;t want to go anywhere.<br>
+      <br>
+      The word you memorize is the word that you will utilize.<br>
+      <br>
+      Grow in your relationships. Grow in the knowledge of God and we can make things better.</p>
+  </div>
+  <div data-role="footer">
+    <h4>Footer</h4>
+  </div>
+</div>
+<div data-role="page" id="bible" data-add-back-btn="true">
+  <div data-role="header">
+    <h1>Bible Study Notes</h1>
+  </div>
+  <div data-role="content">
+    <p>&nbsp;    
+    <ul data-role="listview"><li><a href="#bible2">12/18 - The Laws of Prayer</a></li>
+      <li><a href="#bible3">12/11 - Understanding Prayer</a></li>
+      <li><a href="#bible4">11/19 - Great Faith</a></li>
+      <li><a href="#bible5">11/12 - We Walk By Faith - Not By Sight</a></li>
+    </ul>
+    </p>
+  </div>
+  <div data-role="footer">
+    <h4>Footer</h4>
+  </div>
+</div>
+<div data-role="page" id="bible2" data-add-back-btn="true">
+  <div data-role="header">
+    <h1>The Laws of Prayer</h1>
+  </div>
+  <div data-role="content">
+    <p align="left"><strong>Date:</strong> December 18, 2014<br>
+      <br>
+      <strong>Bible Study Topic:</strong> The Laws of Prayer<br>
+      <br>
+      <strong>Scriptures:</strong> Ephesians 3:13, Romans 13:1, Luke 10:19 -20, John 13:14<strong>, </strong>Hebrews 11:6, Hebrews 4:16, Mark 11:24-25, 1 John 5:14, 2 Chronicles 20:17, Romans 8:26, Philippians 4:6, Psalm 34:1, Joshua 23:14, Romans 8:38-39, 1 Peter 4:12, Psalm 33:9, Matthew 20:29<br>
+      <br>
+      <strong>Bible Study Notes:</strong><br>
+      <br>
+God&rsquo;s commitment to his purpose will never violate his spoken word. Prayers are not only effective in our lives it&rsquo;s also effective in the lives of those we pray for. Paul prayed for wisdom and understanding for the church in Ephesians. Jesus Christ, savior is the same as Christ our Lord. <br>
+<br>
+<strong>Ephesians 3:13 – I ask you, therefore, not to be discouraged of my sufferings for you, which are your glory. </strong><br>
+<br>
+Prerequisite for prayer - Don&rsquo;t be afraid to ask God for what you need, according to his word. <br>
+You must be rooted and grounded in the word. There must be a foundation.<br>
+<br>
+      James said to call on those who are seasoned in the word to pray. Everyone can&rsquo;t pray for you. Some people don&rsquo;t have the right mindset or their relationship isn&rsquo;t in order. Our primary focus should be to pray for others instead of for ourselves.<br>
+      <br>
+      If we only pray for ourselves, our prayer lives become selfish. <br>
+  <br>
+  <strong>Romans 13:1 – Let everyone be subject to the governing authorities, for there is no authority except that which God has established. The authorities that exist have been established by God.</strong> The powers that be are ordained by God. Every leader in place has been placed there for a reason.<br>
+  <br>
+      Whoever resists that power, resist God and face damnation. We must obey those who are over us.<br>
+      <br>
+      We are heaven&rsquo;s representative in the earth. God gave the power to man in the earth. <br>
+      <strong>Luke 10:19 -20 – I have given you the authority to trample on snakes and scorpions and to overcome all the power of the enemy; nothing will harm you. However, do not rejoice that the spirits submit to you, but rejoice that your names are written in heaven.</strong> Prayer pleads the name of Jesus.<br>
+      <br>
+      We are heaven&rsquo;s representative in the earth. God gave the power to man in the earth.<br>
+    <strong>John 13:14 – You call me &lsquo;Teacher&rsquo; and &lsquo;Lord&rsquo; and rightly so, for that is what I am. Now that I, your Lord and teacher, have washed your feet, you also should wash one another&rsquo;s feet. </strong>There is an order to our prayers. We yield to the will of Christ in prayer. </p>
+    <p>The following are key components to answered prayers:</p>
+    <ul>
+      <li>Faith</li>
+      <li>Praise</li>
+      <li>Adoration</li>
+      <li>Worship</li>
+      <li>Confession</li>
+    </ul>
+    <p><strong>8 Laws of Prayer</strong></p>
+    <ul>
+      <li><strong>Faith</strong> – we must have faith when we approach God. Hebrews 11:6 – with faith in God, I am not anxious about anything.  <br>
+      </li>
+      <li><strong>Boldness</strong> – Hebrews 4:16 We don&rsquo;t pray in a state of worry. You must come boldly to the throne. Know that he is a rewarder. You have the right to make your requests to God.<br>
+      </li>
+      <li><strong>Right relationship</strong> – We need to have the right relationship. Everything we discuss must be in place. Mark 11:24-25 Un-forgiveness is one of the reasons for unanswered prayers. We need to forgive.<br>
+      </li>
+      <li><strong>The will of God -</strong> 1 John 5:14 When you ask according to his will, he hears us. When I rely on God and his promises I have the assurance that what I ask of God I shall receive. <br>
+      </li>
+      <li><strong>Confidence </strong>– We must be confident that God will work in every area of our lives. 2 Chronicles 20:17. Conviction of God – Stand still and see the salvation. We must have confidence in every promise of God in every aspect. Never allow anything, anyone or any circumstance to cause you to doubt the word of God. God won&rsquo;t change. You can stand on the word of God. Be careful – don&rsquo;t allow time to change your belief system, because God has already told us that his way is not our way. <br>
+      </li>
+      <li><strong>Don&rsquo;t pre-determine how God will answer your prayers - </strong>Philippians 4:6 – We have a promise, an agreement from God. I have confidence that when God answers my prayer, it will satisfy my needs. He knew what we needed before we asked.</li>
+    </ul>
+    <p>The law of the Holy Spirit Romans 8:26 – The blood of Jesus. You can plead the blood. </p>
+    <ul>
+      <li><strong>The law of praise</strong> – Psalm 34:1 - has nothing to do with how you feel or what you&rsquo;re dealing with, you will bless the Lord at all times. No matter what is going on in my life – praise is coming out.  He inhabits the praise of his people. Praises brings God into the midst of whatever we are dealing with.<br>
+         </li>
+      <li><strong>Reverence</strong> – You must fear God. You have the power to deliver when you have reverence for God. Everything is predicated on our faith in God.</li>
+    </ul>
+    <p>There is no want for those who have faith in Christ – cast away anxieties, if you believe it, you shall have it. We have confidence in God&rsquo;s deliverance, word and promises<br>
+      We must love the word<br>
+      <br>
+  <strong>Joshua 23:14 - Heaven and earth will pass away but my word will stand forever. </strong>My confidence must be centered in Christ. <br>
+  <br>
+  <strong>Romans 8:38-39 – For I am convinced that neither death nor life, neither angels nor demons,[a] neither the present nor the future, nor any powers, 39&nbsp;neither height nor depth, nor anything else in all creation, will be able to separate us from the love of God that is in Christ Jesus our Lord.</strong> Paul wrote that nothing will separate us from the love of God. We must be mindful in our prayer life that nothing will separate us from God&rsquo;s love. Confidence enables us to endure. <br>
+  <br>
+  <strong>1 Peter 4:12 – Blessed are you if you are enduring. When you suffer God is glorified.</strong> Don&rsquo;t be surprised. The same thing that happens to us happens to everyone, but since we are the body of Christ we will be delivered. <br>
+  <br>
+      Judgment begins with us first.<br>
+      <br>
+      We have the assurance that God will keep us.<br>
+      <br>
+      I am a child of God<br>
+      <br>
+      I am saved and sanctified <br>
+      <br>
+      I have the heart of God on my mind<br>
+      <br>
+      If I have iniquity in my heart God won&rsquo;t hear me. When you pray to God remove all distractions, come to God alone. <br>
+      <br>
+      Give God glory when you pray. Give to others out of the abundance of what God has given to you. Jesus loves a cheerful giver. Remain in the anointing. Honor the Lord by reflecting the anointing. They should be able to see that you&rsquo;re a Christian. <br>
+      <br>
+      You are the light of the world. Cultivate the God kind of faith. Negative faith and positive faith can come by the same means – What we listen to and what we believe. Everyone has faith. We need the God-kind of faith if we want to operate in the kingdom.<br>
+      <br>
+  <strong>Psalm 33:9 – For he spoke, and it came to be; he commanded, and it stood firm.</strong> He spoke and it was done. God spoke the universe into existence. When you ask for something in prayer, keep speaking about it and it will manifest. Death and life are in the power of the tongue. Remember that what you say is a reflection of your heart.<br>
+  <br>
+      Faith is combined with expectation and action. <br>
+  <br>
+      Never allow the enemy to make you profess negativity. If you say you won&rsquo;t get it – you don&rsquo;t get it.<br>
+      <br>
+      They preach themselves out of it.  </p>
+  </div>
+</div>
+<div data-role="page" id="bible3" data-add-back-btn="true">
+  <div data-role="header">
+    <h1>Understanding Prayer</h1>
+  </div>
+  <div data-role="content">
+    <p><strong>Date:</strong> December 11, 2014<br>
+      <br>
+      <strong>Scriptures:</strong> Colossians 3:12, 1 Corinthians 13, Philippians 3:7-8, John 1:12, Romans 4:21, Hebrews 11, John 20:31, Psalm 125:1, Psalm 119, Ezekiel 22:30, 1 Peter 2:9, John 16:23, 2 Corinthians 10:4, Ephesians 1:3, Psalm 27, Galatians 5:16, Philippians 4: 6<br>
+      <br>
+      <strong>Sermon Topic:</strong> Understanding Prayer<br>
+      <br>
+There is an absolute connection between faith and prayer. How do I turn what the scripture says into the way I live? <br>
+<br>
+<strong>Colossians 3:12-13 – Put on therefore, as the elect of God, holy and beloved, bowels of mercies, kindness, humbleness of mind, meekness, longsuffering; (13) Forbearing one another, and forgiving one another, if any man have a quarrel against any; even as Christ forgave you, so also do ye. </strong><br>
+<br>
+Have a forgiving spirit. Even as Christ forgave us; he forgave us while we were in our sins. Romans 8:5- We had the forgiveness. The word of God works for us. When our lives are in line with God. <br>
+<br>
+When we get our mindset and lifestyle conformed to this scripture then we are in the right relationship with Christ. <br>
+<br>
+When we are in the right place – we can make our requests known to God.<br>
+<br>
+<strong>1 Corinthians 13:2 – And thought I have the gift of prophecy, and understand all mysteries, and all knowledge; and though I have all faith, so that I could remove mountains, and have not charity, I am nothing. </strong>You can have faith but if you don&rsquo;t have love it doesn&rsquo;t profit you. Our standing in the word of God is determined by our love and faith.<br>
+<br>
+<strong>Philippians 3:7-8</strong> – <strong>But what things were gain to me, those I counted loss for Christ. (8) Yea doubtless, and I count all things but loss for the excellency of the knowledge of Christ Jesus my Lord; for whom I have suffered the loss of all things, and do count them but dung, that I may win Christ. </strong>Nothing else matters when it comes to our relationship with Christ. We must put nothing before Christ – With that understanding we must trust what God says will work in our lives, because of the promises/covenant with God.<br>
+<br>
+Take what God says and apply it – Never let your thoughts interfere with what God says. <br>
+Sarah and Abraham had to trust in God. Abraham believed in God. He trusted in him. <br>
+<br>
+We as believers have circumstances that come up in our lives where we question, &ldquo;How will I do this?&rdquo; It&rsquo;s not you – it&rsquo;s God. The strength comes from God. Whenever you face something that is hard remember that faith acts like it is, so even if it&rsquo;s not so, until it&rsquo;s so. <br>
+<br>
+It exists in the spiritual realm but it takes faith for it to be so. <strong>John 1:12</strong> <strong>– But as many as received him, to them gave he power to become the sons of God, even to them that believe on his name.</strong> He gave those who received him, power. <br>
+<br>
+The word of God is the final. Authority, when everyone has their say – I&rsquo;m standing on the word of God.<br>
+Be mindful of Satan&rsquo;s tactic to make you discouraged. We can call things that are not into existence.<br>
+<br>
+There&rsquo;s a difference between faith, belief and simply acknowledging something.<br>
+Faith isn&rsquo;t a possession – it&rsquo;s a decision.<br>
+<br>
+I&rsquo;m going to trust in God – no matter what. We can&rsquo;t receive negativity as people of God.<br>
+<br>
+No matter the relationship – I can&rsquo;t be around doubtful people. <br>
+<br>
+Words are seeds that manifest in your life. <br>
+<br>
+If you profess that it won&rsquo;t get better, it won&rsquo;t. Faith works both ways. If you move from the place of believing that it will happen to doubting, it won&rsquo;t happen. <br>
+<br>
+Whatsoever you say, if you say to this mountain be thou removed and cast into the sea, it will obey you.<br>
+<br>
+As Christians we persevere in faith. No one said it would be easy. Galatians 3 - Stand fast in the liberty of Christ. Don&rsquo;t go back to the old belief system. You can&rsquo;t fluctuate between the old believe system and faith. <br>
+<br>
+Doubt cancels out everything. Without faith it&rsquo;s impossible to please God. He&rsquo;s a rewarder of those who diligently seek him. <br>
+<br>
+God rewards us. There are times when issues arise in our lives. You be the first to reconcile. It blocks your blessings. You must get past it. Get on with your life.<br>
+<br>
+Both of us have an assignment in the kingdom. When you quarrel you are holding up God&rsquo;s work. God is not the author of confusion.<br>
+<br>
+If two brothers and sisters are at odds, it is our responsibility as Christians to help them reconcile to finish God&rsquo;s work. <br>
+<br>
+The school of faith teaches us to trust in God to solve our problems and trust in God when he decides not to solve our problems.<br>
+<br>
+Your way is not my way. He will never leave nor forsake us. We have promises in the kingdom of God.<br>
+<br>
+<strong>Romans 4:21</strong> <strong>– And being fully persuaded that, what he had promised, he was able also to perform. </strong>All of the promises of God will be kept. He has no &ldquo;maybe&rdquo; promises. God&rsquo;s promises are as good as the real thing.<br>
+<br>
+<strong>Hebrews 11:39</strong> <strong>– And these all, having obtained a good report through faith, received not the promise. </strong> they died in faith knowing that a heavenly promise would come to pass, but not during their lifetimes. <br>
+<br>
+Scripture is designed to produce faith.<strong></strong><br>
+<br>
+<strong>John 20:31 –But these are written, that ye might believe that Jesus is the Christ, the Son of God; and that believing ye might have life through his name. </strong> We serve a faithful God, it&rsquo;s a part of God&rsquo;s character to be faithful. Trust in God and his words. <br>
+<br>
+<strong>Psalm 125:1 – They that trust in the Lord shall be as mount Zion, which cannot be removed, but abideth for ever.</strong> When the storms of life come into your life – you need to have this verse in your spirit. <br>
+<br>
+Trials will come – many are the afflictions of the righteous. Remember to trust in God and in his promises. <br>
+<br>
+When you pray, go to the scripture and pray God&rsquo;s words back to him. When you do this, no problem can harass you. <br>
+<br>
+In our trouble and trials we are supposed to be the light of the world – because someone is always watching you.<br>
+<br>
+The enemy and his people look for us to fail. When we continue to stand, the enemy loses his mind. <br>
+<br>
+<strong>Psalm 119</strong> – God needs our participation.<strong></strong><br>
+<br>
+<strong>Ezekiel 22:30 – And I sought for a man among them, that should make up the hedge, and stand in the gap before me for the land, that I should not destroy it; but I found none. </strong>We control our environment. <br>
+<br>
+You must say it with the confidence to believe what we say. <strong>1 Peter 2:9 – But ye are a chosen generation, a royal priesthood, an holy nation, a peculiar people; that ye should shew forth the praises of him who hath called you out of darkness into his marvelous light.</strong> We are a royal priesthood, a holy nation, peculiar people. When God says that about me – It doesn&rsquo;t matter what others say about me.<br>
+<br>
+We as God&rsquo;s people have to live disciplined lives because of the distractions around us. <br>
+The church has been taught for years about our unworthiness that we don&rsquo;t say what God says.<br>
+Affirm your faith by verbalizing what the scripture says about us. <strong>John 16:23 – And in that day ye shall ask me nothing. Verily, verily, I say unto you, Whatsoever ye shall ask the Father in my name, he will give it to you.</strong> Ask and you shall receive. Whatever you ask for in Jesus name – will be.<br>
+<br>
+Walking by faith and not by sight. Put on mercy, long-suffering, forgiveness – then whatever we ask he shall give us. <br>
+<br>
+Power in prayer is not based on emotions but on the word of God. <br>
+<br>
+We don&rsquo;t win victories by being emotional. <br>
+<br>
+<strong>2 Corinthians 10:4</strong> – <strong> For the weapons of our warfare are not carnal, but mighty through God to the pulling down of strong holds.</strong> Those who pray in faith will receive what they request. We must step contrary thoughts from entering our minds. Fiery darts of the wicked are contrary thoughts. The thoughts will come but you don&rsquo;t have to receive it. <br>
+<br>
+Never allow the image to form in your mind, especially over a long period of time.<br>
+God doesn&rsquo;t have to answer immediately don&rsquo;t get discouraged when it doesn&rsquo;t come today.<br>
+If he says it, it will happen. His words will not return to him empty.<br>
+<br>
+<strong>Ephesians 1:3</strong> <strong>– Blessed be the God and Father of our Lord Jesus Christ, who hath blessed us with all spiritual blessings in heavenly places in Christ.  </strong>We are already blessed. Everything in the natural world, existed first in the spiritual realm. <br>
+<br>
+We are chose – predestined. Prayers aren&rsquo;t based on emotions – We discipline ourselves not to become emotional when we are facing a crisis. <br>
+<br>
+<strong>Psalm 27</strong> <strong>– The Lord is my light and my salvation; whom shall I fear? The Lord is the strength of my life; of whom shall I be afraid? </strong>Wait on the Lord – don&rsquo;t get emotional or upset. We must praise God. <br>
+<br>
+<strong>Philippians 1:6 – Being confident of this very thing, that he which hath begun a good work in you will perform it until the day of Jesus Christ. </strong> God won&rsquo;t start something that he can&rsquo;t complete.  <br>
+<br>
+Don&rsquo;t get emotional. <strong>Galatians 5:16</strong> <strong>– This I say then, Walk in the Spirit, and ye shall not fulfill the lust of the flesh. </strong>We are children of God. We should get excited about the victory. <br>
+We have a relationship with God. Our minds need to be renewed. The enemy attacks your mind. He tries to get us to think negative and feel sorry for ourselves. He wants us to feel alone.<br>
+Don&rsquo;t allow negativity in. Christ is our advocate. He stands for us.<br>
+<br>
+Christ died on the cross for us but won&rsquo;t help now? He died so that we could live. Living in the kingdom isn&rsquo;t simply existing. <br>
+Speak encouraging words.<br>
+<br>
+I&rsquo;m Blessed<br>
+<br>
+My Needs are Met With Christ<br>
+<br>
+I&rsquo;m Covered<br>
+<br>
+Speak scripture into your lives.<br>
+<br>
+When you do this what&rsquo;s on the inside changes our outward appearance.<br>
+<br>
+We must pray with confidence and compassion.<br>
+<br>
+Every experience in our lives god uses it for good.<br>
+<br>
+Joseph had a rough life. Everything happened to him. <br>
+<br>
+God is preparing you for something that&rsquo;s in your future, because you have purpose.<br>
+With purpose you must pursue it. Believers must be faithful and trusting<br>
+<br>
+<strong>Philippians 4: 6</strong> – <strong>Be careful for nothing, but in everything by prayer and supplication with thanksgiving, let your requests be made known unto God. </strong>We make our requests and we&rsquo;re thankful when we make our requests. <br>
+<br>
+Praise should always accompany our requests.<br>
+<br>
+Lord, Thank you!<br>
+<br>
+Continue to walk by faith not by sight. <br>
+<br>
+When you start feeling down start to praise God.<br>
+<br>
+Praise eliminates the sadness. We can&rsquo;t praise God and be sad.<br>
+Keep praising him!<br>
+<br>
+Keep saying that you are blessed.<br>
+<br>
+Don&rsquo;t let anything weigh you down.</p>
+    <p>&nbsp;</p>
+  </div>
+</div>
+<div data-role="page" id="bible4" data-add-back-btn="true">
+  <div data-role="header">
+    <h1>Great Faith</h1>
+  </div>
+  <div data-role="content">
+    <p><strong>Date:</strong> November 19, 2014<br>
+      <br>
+      <strong>Bible Study Topic:</strong> Great Faith<br>
+      <br>
+      <strong>Scriptures</strong>: John 15:16, Hebrews 11:6, Philippians 4: 6-7, Psalms 84:11, 1 John 3:18, John 15:5, Acts 1:8, 1 Corinthians 13:2, Genesis 17:15, Genesis 17, Galatians 3:26 , 3 John 2,  Job 36:11, Matthew 5:39<br>
+      <br>
+    <strong>Bible Study Notes:</strong></p>
+    <p><strong>John 15:16</strong> – You did not choose me, but I chose you and appointed you to go and bear fruit – fruit that will last. All things are possible if you believe. Whatever you ask the father in my name, he will give you, but you first must love one another. <br>
+      Faith worketh by love.<br>
+      <br>
+  <strong>Hebrews 11:6</strong> – Without faith it is impossible to please God. When I diligently seek after God, I receive whatever I ask. I must block out distractions; my focus must be on God.<br>
+      The just shall live by faith. If you seek God for something but have disbelief, God has no pleasure in you. If you question or worry you are not trusting in God.<br>
+      <br>
+      When your situation deteriorates you must still stay in faith. Job had all types of troubles. He kept his faith while things continued to get worse in his life. He was covered in boils from head to toe. When his blessings came, it was greater than he could&rsquo;ve ever expected; better than he had before. <br>
+      <br>
+      Not believing is the equivalent of not trusting in God. Since we know that God is with us, we must discipline our mind so we don&rsquo;t do anything contrary to what God has promised. <br>
+      <br>
+      The will of God – Constant questioning of God&rsquo;s will, every time you pray, is the greatest hindrance to God answering your prayers. <br>
+      We must be obedient.<br>
+      <br>
+      Whatever you ask for in prayer, you shall receive. <strong>1 John 3:18</strong> – When we keep God&rsquo;s commandments and do what is pleasing in his sight, our prayers will be answered. We have to love others and keep his commandments. God won&rsquo;t say no to those who keep his word. <br>
+      Nothing is too hard for God and nothing promised by God for his children shall be impossible. I can do all things through Christ who strengthens me, but <em>all things</em> must line up with his word. <br>
+  <strong><br>
+  Philippians 4: 6-7</strong> – Be careful for nothing. You can hold God to his word. What he says is truth and it won&rsquo;t be changed. <br>
+  <br>
+  <strong>Psalms 84:11</strong> – No good thing will he withhold from those who walk upright before him. God has no respect of person. He will supply all of our needs, when we ask in faith. We have the confidence in God to say I know he will do it. I don&rsquo;t know when he will do it, but he will keep me until the prayer is answered. <br>
+  <br>
+      When God doesn&rsquo;t answer our prayer exactly as we asked, we must take a step back and realize that God will give us what we need.<br>
+      <br>
+  <strong>John 15:5 – </strong>If you abide in me and I in you ask what you will. <br>
+  <br>
+  <strong>Acts 1:8</strong> – the power that Jesus has, he gives to us. We have the power to call those things that are not, as though they are. <br>
+  <br>
+      In <strong>Genesis 1</strong> – God said and God saw. He spoke things into existence and then he witnessed it. <br>
+      <br>
+      There is nothing impossible for us. You must understand the tactics of the adversary. Cast down negative thoughts and imaginations. When you are believing God for a miracle, don&rsquo;t receive negativity. <br>
+      <br>
+  <strong>1 Corinthians 13:2</strong> – If you don&rsquo;t have faith or love you won&rsquo;t receive the blessings of God. <br>
+  <br>
+  <strong>Genesis 17</strong> – God has a covenant with us. He doesn&rsquo;t go back on his covenant. <strong>Genesis 17:15</strong> – God promised Abraham that he would be the father of a multitude and Sarah the mother of many nations. <br>
+  <br>
+      When God sets us up for something – we can&rsquo;t substitute.<br>
+      <br>
+      Since we are the righteous and just, we shall live by faith. We have to maintain a certain behavior. We must walk in the spirit. <br>
+      <br>
+      We have to maintain the right standing with God. We are saved and filled. No man can take us from God&rsquo;s hands. There may be times when something goes wrong in your life, but your standing will not be affected. When we don&rsquo;t do what pleases God our standing doesn&rsquo;t change. He won&rsquo;t go back on his word. God won&rsquo;t change.<br>
+      Our faith in Christ gave us power. <br>
+      <br>
+  <strong>Galatians 3:26</strong> – We are all one in Christ. We are Abraham&rsquo;s seed and heirs to the throne, according to the promise.<br>
+  <br>
+      Never say that the Lord put something on you. He didn&rsquo;t. He came to give us an abundant life. The enemy comes to steal, kill and destroy. <br>
+      <br>
+  <strong>3 John 2</strong> – Beloved, I wish above all things that thou mayest  prosper and be in health, even as thy soul prospereth. <br>
+  <br>
+      There are channels through where God supplies our needs. Our job is not a source of income; it is a channel from which God uses. <br>
+      <br>
+      I will prosper and be in health according to my faith.<br>
+      <br>
+  <strong>Job 36:11</strong> – If they obey him, they shall spend their days in prosperity and their years in pleasure. <br>
+  <br>
+      He forgives all iniquities and heals all diseases. We need to have confidence and also self-control. Our winning is based on our ability to control our actions.<br>
+      <br>
+      We need to be still and know that he is God. Be still and wait. God does what he needs to do, but we must wait. There&rsquo;s a time to move and a time to be still. <br>
+      <br>
+      In a multitude of words there is confusion and doubt. If our actions aren&rsquo;t controlled in one area we lose control everywhere. <br>
+      We must respond well to persecution. <br>
+      <br>
+  <strong>Matthew 5:39</strong> – turn the other cheek to persecution. This is the make-up of the disciple. Although we are going through stuff we have a calling on our lives. We have kingdom business. We&rsquo;ve already committed to God.<br>
+  <br>
+      Cast your cares on God and leave it. Stand in faith. Keep believing God for a miracle.<br>
+      <br>
+      We are blessed – we must say that constantly. Rehearse your victory. Because we are overcomers, we shouldn&rsquo;t change our speech. It should be in line with our position. <br>
+      <br>
+  <strong>Faith acts like it is so, even when it&rsquo;s not so, so it will be so!</strong><br>
+  <br>
+      You are a child of God; you can bless your home and your family. There is nothing contrary to the word. We are faith filled people. We walk by faith and not by sight.<br>
+      <br>
+      Sometimes there will be obstacles and distractions; don&rsquo;t let that distract you. You may have to take a detour. When you take the detour – enjoy the scenery. <br>
+      <br>
+      Enjoy life – get up every day with the mindset that I will enjoy the day the Lord has made. <br>
+    Enjoy your life – that&rsquo;s why Jesus came. He came to give us an abundant life. </p>
+  </div>
+</div>
+<div data-role="page" id="bible5" data-add-back-btn="true">
+  <div data-role="header">
+    <h1>For we walk by faith and not by sight</h1>
+  </div>
+  <div data-role="content">
+    <p><strong>Date:</strong> November 12, 2014<br>
+      <br>
+      <strong>Foundational Scripture:</strong> 2 Corinthians 5:7 – For we walk by faith and not by sight.<br>
+      <strong><br>
+      Bible Study Notes:</strong><br>
+      <br>
+There are times when our faith is tested and we must persevere through it all. The power of your speech is significant. Get out of an old belief or mindset. There are times when we are boxed in and we put God in a box.<br>
+<br>
+Say it until you see it.<br>
+<br>
+We are people of faith. We call those things that aren&rsquo;t as though they are. John 1: 12 – To as many who have received him, we have power to be, but we must be willing to become. Since all of the promises are yes and amen, I have all that I need. When it comes to God&rsquo;s promises, we must be tough-minded. When we don&rsquo;t move from what God says it strengthens our minds. Getting tough-minded about our purpose develops our character.<br>
+<br>
+<strong>2 Peter 3:14</strong> – We according to his promise must be steadfast. Be diligent –Be blameless. Get out of those negative environments.<br>
+<br>
+As Christians, we can create an atmosphere of victory. When we create an atmosphere we get an image of victory. If you can create an image – you can change the circumstances.<br>
+<br>
+We create the image by meditating on the image and the word of God.<br>
+<br>
+<strong>1 Samuel</strong> – David was not moved by what he saw. <br>
+<br>
+If I made it through some obstacles yesterday and I&rsquo;m faced with a new problem, I must meditate on what God did before.<br>
+<br>
+Just like David recalled when God delivered him from the lion and the bear he can be delivered from the Philistine. You must have the same faith. Your faith must be equal to your confession.<br>
+<br>
+<strong>Mark 11:23</strong> – If you believe it; you will have it. Have the faith.<br>
+We must talk expectations – not experiences. Experiences are in the past – expectation is what&rsquo;s in front of me. <br>
+ <br>
+Don&rsquo;t dwell on the past – since greater is before you.<br>
+<br>
+What he promised, he will bring it to past. <br>
+<br>
+<strong>Proverbs 10:12</strong> – the mouth of the righteous is a well of life – you must speak life. We must guard our speech.<br>
+<br>
+Don&rsquo;t allow a situation to prophesize to you.<br>
+<br>
+<strong>1 Corinthians 2:4</strong> – We must endure and talk expectation. Endurance is a key to walk by faith. Be not weary. Your season will show up – if you endure. You shall reap if you faint not.<br>
+Faith is not a longing for something that will come to pass. True faith is a confirmation. <br>
+<strong>Genesis 22</strong> – If you can believe all things are possible. God doesn&rsquo;t tempt us, he tests us. Abraham had the God kind of faith. He travelled with his son for 3 days without questioning God.<br>
+<br>
+The promise that God gave Abraham in Chapter 21 overrode what fear he would&rsquo;ve had.<br>
+<br>
+There are times when your faith will be tested.<br>
+<br>
+There are times when you are believing God for something, where you can&rsquo;t be in the company of doubters and disbelief. They are sowing seeds. The doubters sow into your ear gate that plants the seed or they will remind you of how what you&rsquo;re seeking God for has failed someone else.<br>
+<br>
+Be careful who you allow into your environment. When you&rsquo;re believing God for a miracle. <br>
+<br>
+Luke 8:47 – Don&rsquo;t receive what you may hear about your circumstances. Stand on the promises. Never receive anything that&rsquo;s counter-productive to the word of God. No matter the situation – trust in God.<br>
+<br>
+There are times when you must separate yourself. <strong>Matthew 6</strong> – When you pray, pray in secret and the Lord will reward you openly.<br>
+<br>
+God is the same, yesterday, today and forever. We must control our actions – be in control or it will affect you.<br>
+<br>
+Your winning hinges on your ability to control your actions.<br>
+<br>
+There is a consequence of not trusting God. Hebrews 10:38-39 – The just shall live by faith. If any man draweth back, God has not pleasure in them. We must be faith-filled people. I must believe that he is God and believe that he is a rewarder of those who diligently seek him. <br>
+We must give God praise – thanks but we must be careful of what else we say. Guard your speech. <br>
+<br>
+Our performance doesn&rsquo;t determine our standing in Christ, because grace keeps us.<br>
+<br>
+My standing in Christ determines my performance.<br>
+<br>
+It&rsquo;s in him that we live, move and have our being.<br>
+<br>
+They who trust in the Lord shall not be moved. When things look shaky they&rsquo;re still working out for the good. Put a smile on your face and be of good courage.<br>
+<br>
+You always move in the direction of your desire. What you do daily affects your desire. Some things we shouldn&rsquo;t watch on T.V. because it sow seeds into the spirit. Faith is the capacity to trust in God even when it doesn&rsquo;t make sense; even when you feel like the only one going through. You just keep moving.<br>
+<br>
+Don&rsquo;t dwell on the negative. Our lives don&rsquo;t change until we change our thoughts. There are some areas that hinder you from seeing God&rsquo;s point of view.<br>
+<br>
+Sometimes circumstances can make you utter words that are contrary to God.<br>
+<br>
+Stand in faith – wait on the Lord – trust in God.<br>
+<br>
+The word of God will stand forever. No matter what may come.<br>
+<br>
+Reflect on your previous experiences, but don&rsquo;t let it limit you from what God can do now.<br>
+Your past mistakes shouldn&rsquo;t prevent you from future increase. Satan is an accuser. He can&rsquo;t read our mind, but he hears what we say. He listens to what we say an seeks whom he can devour. </p>
+    <p>Whatever you say will come to pass. God will not violate his word. You will have whatever you say. God won&rsquo;t go against his word. Your current circumstances and other people&rsquo;s experiences limit you. You are walking in the flesh when you pay attention to the past.<br>
+      <br>
+      Negative limiting words – words that entice you to quit. The enemy wants to keep you from seeing God working in your life. <br>
+      <br>
+  <strong>Deuteronomy 28</strong>: you&rsquo;re already blessed. Guard your speech. I need a blessing, counter the word of God. <br>
+  <br>
+      God wants us to look like us but act like him.<br>
+      <br>
+    Don&rsquo;t get worried; keep saying it if it doesn&rsquo;t happen tomorrow, it will happen. </p>
+  </div>
+</div>
+<div data-role="page" id="social" data-add-back-btn="true">
+  <div data-role="header">
+    <h1>MHUMC Social Media</h1>
+  </div>
+  <div data-role="content">
+    <p>Mt. Hope United Methodist Church would like to invite you to follow us online. </p>
+    <p>Check out our blog: <a href="http://mhumcsermonnotes.blogspot.com/">mhumcsermonnotes.blogspot.com</a></p>
+    <p>Visit our website: <a href="http://www.mthopeunitedmethodistchurch.org">www.mthopeunitedmethodistchurch.org</a></p>
+    <p>&nbsp;</p>
+    <p>&nbsp;</p>
+  </div>
+</div>
 </div>
 </body>
 </html>
