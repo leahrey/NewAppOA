@@ -3,7 +3,7 @@
     xmlns:gap = "http://phonegap.com/ns/1.0"
 <<<<<<< Updated upstream
     id        = "com.phonegap.optimistic"
-    version   = "2.0.0">
+    version   = "3.0.0">
 	<icon src="icon.png" />
 	<gap:splash src="splash.png" />
 =======
@@ -16,7 +16,7 @@
 <description>
 Now you can take your bible study and sermon notes with you, everywhere you go.</description>
 
-<author href="https://example.com" email="leahreynolds.lr@gmail.com">
+<author href="http://www.optimisticautistic.com" email="leahreynolds.lr@gmail.com">
 Leah Reynolds
 </author>
 
