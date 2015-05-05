@@ -100,8 +100,8 @@ div.ui-mobile-viewport {
 	display: none;
 	z-index: 9999999;
 	position: fixed;
-	top: 50%;
-	left: 50%;
+	top: 100%;
+	left: 100%;
 	border:0;
 }
 .ui-loader-default {
@@ -324,7 +324,7 @@ div.ui-mobile-viewport {
 .ui-btn-icon-notext:after,
 .ui-btn-icon-left:after,
 .ui-btn-icon-right:after {
-	top: 50%;
+	top: 100%;
 	margin-top: -11px;
 }
 .ui-btn-icon-left:after {
@@ -348,7 +348,7 @@ div.ui-mobile-viewport {
 .ui-btn-icon-notext:after,
 .ui-btn-icon-top:after,
 .ui-btn-icon-bottom:after {
-	left: 50%;
+	left: 100%;
 	margin-left: -11px;
 }
 .ui-btn-icon-top:after {
@@ -500,7 +500,7 @@ li.ui-block-e {
 .ui-grid-a > .ui-block-b {
 	/* width: 49.95%; IE7 */
 	/* margin-right: -.5px; BB5 */
-	width: 50%;
+	width: 100%;
 }
 .ui-grid-b > .ui-block-a,
 .ui-grid-b > .ui-block-b,
@@ -732,11 +732,11 @@ li.ui-block-e {
 
 /* flow transition */
 .flow {
-	-webkit-transform-origin: 50% 30%;
+	-webkit-transform-origin: 100% 30%;
 	-webkit-box-shadow: 0 0 20px rgba(0,0,0,.4);
-	-moz-transform-origin: 50% 30%;	
+	-moz-transform-origin: 100% 30%;	
 	-moz-box-shadow: 0 0 20px rgba(0,0,0,.4);
-	transform-origin: 50% 30%;	
+	transform-origin: 100% 30%;	
 	box-shadow: 0 0 20px rgba(0,0,0,.4);
 }
 .ui-dialog.flow {
@@ -858,9 +858,9 @@ li.ui-block-e {
 
 
 .pop {
-	-webkit-transform-origin: 50% 50%;
-	-moz-transform-origin: 50% 50%;
-	transform-origin: 50% 50%;
+	-webkit-transform-origin: 100% 100%;
+	-moz-transform-origin: 100% 100%;
+	transform-origin: 100% 100%;
 }
 
 .pop.in {
@@ -1647,7 +1647,7 @@ textarea.ui-mini {
 .ui-input-search:after {
 	position: absolute;
 	left: .3125em;
-	top: 50%;
+	top: 100%;
 	margin-top: -7px;
 	content: "";
 	background-position: center center;
@@ -1661,7 +1661,7 @@ textarea.ui-mini {
 .ui-input-text.ui-input-has-clear .ui-btn.ui-input-clear {
 	position: absolute;
 	right: 0;
-	top: 50%;
+	top: 100%;
 	margin: -14px .3125em 0;
 	border: 0;
 	background-color: transparent;
@@ -1909,7 +1909,7 @@ input.ui-slider-input {
 .ui-slider-track .ui-btn.ui-slider-handle {
 	position: absolute;
 	z-index: 1;
-	top: 50%;
+	top: 100%;
 	width: 28px;
 	height: 28px;
 	margin: -15px 0 0 -15px;
@@ -2161,7 +2161,7 @@ html .ui-popup .ui-field-contain div.ui-slider-switch {
 	min-height: 1.6em;
 	min-width: .64em;
 	right: .8em;
-	top: 50%;
+	top: 100%;
 	margin-top: -.88em;
 }
 .ui-listview .ui-btn-icon-right .ui-li-count {
